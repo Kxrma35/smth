@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DANAH'S DAY</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .heart {
+      position: absolute;
+      width: 100px;
+      height: 90px;
+      background-color: #ff4b5c;
+      transform: rotate(-45deg);
+      animation: pulse 1.5s infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 90px;
+      background-color: #ff4b5c;
+      border-radius: 50%;
+    }
+    .heart::before { top: -50px; left: 0; }
+    .heart::after { left: 50px; top: 0; }
+
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.2) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
+    }
+
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gradient-to-r from-pink-300 via-red-300 to-yellow-200 overflow-hidden">
+
+  <!-- Pulsing heart background -->
+  <div class="heart"></div>
+
+  <!-- Card -->
+  <div id="card" class="bg-white rounded-2xl shadow-2xl p-10 text-center animate-bounce relative z-10">
+    <h1 class="text-4xl font-bold text-pink-600 mb-4">🎂 Happy Birthday, My Love! 🎉</h1>
+    <p class="text-lg text-gray-700 mb-6">You make my world brighter every single day.</p>
+    <button onclick="askValentine()" 
+      class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-full transition transform hover:scale-110">
+      Click for a Surprise 💌
+    </button>
+  </div>
+
+  <!-- Background music -->
+  <audio id="bgMusic" src="music/Transform (feat. Charlotte Day Wilson) [r_nbv4_t8yQ].mp3" preload="auto"></audio>
+
+  <script>
+    function askValentine() {
+      const card = document.getElementById('card');
+      card.innerHTML = `
+        <h1 class="text-4xl font-bold text-red-600 mb-4">💖 Will You Be My Valentine? 💖</h1>
+        <p class="text-lg text-gray-700 mb-6">Forever yours, with all my heart.</p>
+        <button onclick="stopMusic()" 
+          class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-5 rounded-full transition transform hover:scale-105">
+          Stop Music 🎵
+        </button>
+      `;
+      launchConfetti();
+      playMusic();
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement('div');
+        confetti.className = 'absolute w-2 h-2 rounded-full';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = randomColor();
+        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+      }
+    }
+
+    function randomColor() {
+      const colors = ['#ff4b5c','#ff9a9e','#fad0c4','#fbc2eb','#a18cd1','#f6d365','#fda085'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function playMusic() {
+      const music = document.getElementById('bgMusic');
+      music.volume = 0.3; // soft background volume
+      music.play();
+    }
+
+    function stopMusic() {
+      const music = document.getElementById('bgMusic');
+      music.pause();
+      music.currentTime = 0; // reset to start
+    }
+  </script>
+</body>
+</html>
